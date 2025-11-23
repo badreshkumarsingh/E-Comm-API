@@ -1,0 +1,1 @@
+{"level":"info","message":"/api/products - {\"request body\":\"this time not undefined or any unusual outputs\"}","service":"request-logging"}

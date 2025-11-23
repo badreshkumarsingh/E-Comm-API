@@ -29,4 +29,6 @@ Sat Nov 22 2025 18:38:40 GMT+0530 (India Standard Time). Log Data: /.well-known/
 Sat Nov 22 2025 18:52:36 GMT+0530 (India Standard Time). Log Data: /api/products - undefined
 Sat Nov 22 2025 19:06:47 GMT+0530 (India Standard Time). Log Data: /api/products - undefined
 Sat Nov 22 2025 19:09:02 GMT+0530 (India Standard Time). Log Data: /api/products - {"request body":"this time not undefined"}
-Sat Nov 22 2025 20:24:01 GMT+0530 (India Standard Time). Log Data: /api/products - {"request body":"this time not undefined"}
+Sat Nov 22 2025 20:24:01 GMT+0530 (India Standard Time). Log Data: /api/products - {"request body":"this time not undefined"}{"level":"info","message":"/api/products - {\"request body\":\"this time not undefined or any unusual outputs\"}","service":"request-logging"}
+{"level":"info","message":"/api/products - {\"request body\":\"this time not undefined or any unusual outputs\"}","service":"request-logging"}
+{"level":"info","message":"/api/products - {\"request body\":\"this time not undefined or any unusual outputs\"}","service":"request-logging"}
