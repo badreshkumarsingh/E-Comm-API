@@ -1,1 +1,5 @@
 {"level":"info","message":"/api/products - {\"request body\":\"this time not undefined or any unusual outputs\"}","service":"request-logging"}
+{"level":"info","message":"/api/products/rate?userId=1&productId=1&rating=5 - undefined","service":"request-logging"}
+{"level":"info","message":"/api/products/rate?userId=10&productId=1&rating=5 - undefined","service":"request-logging"}
+{"level":"info","message":"/api/products/rate?userId=10&productId=1&rating=5 - undefined","service":"request-logging"}
+{"level":"info","message":"/api/products/rate?userId=1&productId=10&rating=5 - undefined","service":"request-logging"}

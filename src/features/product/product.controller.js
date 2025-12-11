@@ -50,14 +50,21 @@ export default class ProductController {
         const productId = req.query.productId;
         const rating = req.query.rating;
 
-        const error = ProductModel.rateProduct(userId, productId, rating);
-        console.log(error);
-
-        if(error) {
-            return res.status(400).send(error);
-        } else {
-            return res.status(200).send("Rating Added");
+        // const error = ProductModel.rateProduct(userId, productId, rating);
+        try {
+            ProductModel.rateProduct(userId, productId, rating);
+        } catch (err) {
+            return res.status(400).send(err.message);
         }
+        // console.log(error);
+
+
+        // if(error) {
+        //     return res.status(400).send(error);
+        // } else {
+        //     return res.status(200).send("Rating Added");
+        // }
+        return res.status(200).send("Rating Added");
     }
     
 }
