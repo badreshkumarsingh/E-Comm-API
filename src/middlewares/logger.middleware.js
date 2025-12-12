@@ -25,7 +25,7 @@ const logger = winston.createLogger({
 // const loggerMiddleware = async (req, res, next) => {
 const loggerMiddleware = async (req, res, next) => {
     if(!req.url.includes('signin')) {
-        const logData = `${req.url} - ${JSON.stringify(req.body)}`;
+        const logData = `${new Date().toString()} ${req.url} - ${JSON.stringify(req.body)}`;
         // console.log(logData);
         // await log(logData);
         logger.info(logData);
@@ -34,3 +34,4 @@ const loggerMiddleware = async (req, res, next) => {
 }
 
 export default loggerMiddleware;
+export { logger };

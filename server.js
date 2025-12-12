@@ -10,7 +10,7 @@ import jwtAuth from './src/middlewares/jwt.middleware.js';
 import cartRouter from './src/features/cartItems/cartItems.routes.js';
 // import apiDocs from "./swagger.json" assert {type:"json"};
 import loggerMiddleware from './src/middlewares/logger.middleware.js';
-
+import { logger } from './src/middlewares/logger.middleware.js';
 // import { readFileSync } from 'fs';
 // const apiDocs = JSON.parse(readFileSync(new URL('./swagger.json', import.meta.url)));
 import apiDocs from "./swagger.json" with {type:"json"};
@@ -58,10 +58,20 @@ server.get('/', (req, res) => {
     res.send('Welcome to REST API creation');
 });
 
+// Error handler middleware
+server.use((err, req, res, next) => {
+    console.log(err);
+    const logData = `${new Date().toString()} ${req.url} - ${JSON.stringify(req.body)} - ERROR ${err.message}`;
+            // console.log(logData);
+            // await log(logData);
+    logger.info(logData);
+    res.status(503).send("Something went wrong. Please try again later.");
+});
+
 // 4. Middleware for handling requests that will lead to 404 response to them
 server.use((req, res) => {
     res.status(404).send("API Not Found. Please Check our Documentation for More Information at /api-docs");
-})
+});
 
 server.listen(3100, () => {
     console.log('Server is listening at http://localhost:3100');

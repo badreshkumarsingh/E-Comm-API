@@ -51,11 +51,11 @@ export default class ProductController {
         const rating = req.query.rating;
 
         // const error = ProductModel.rateProduct(userId, productId, rating);
-        try {
+        // try {
             ProductModel.rateProduct(userId, productId, rating);
-        } catch (err) {
-            return res.status(400).send(err.message);
-        }
+        // } catch (err) {
+        //     return res.status(400).send(err.message);
+        // }
         // console.log(error);
 
 
