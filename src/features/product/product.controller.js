@@ -43,11 +43,15 @@ export default class ProductController {
         res.status(200).send(result);
     }
 
-    rateProduct(req, res) {
+    rateProduct(req, res, next) {
         // const {userId, productId, rating} = req.query
         console.log(req.query);
+
+        try {
+
         const userId = req.query.userId;
         const productId = req.query.productId;
+        // const rating = req.querys.rating;
         const rating = req.query.rating;
 
         // const error = ProductModel.rateProduct(userId, productId, rating);
@@ -58,6 +62,11 @@ export default class ProductController {
         // }
         // console.log(error);
 
+        } catch (err) {
+            console.log("Error in controller");
+            next(err);
+            return;
+        }
 
         // if(error) {
         //     return res.status(400).send(error);

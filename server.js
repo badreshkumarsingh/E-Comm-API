@@ -14,6 +14,8 @@ import { logger } from './src/middlewares/logger.middleware.js';
 // import { readFileSync } from 'fs';
 // const apiDocs = JSON.parse(readFileSync(new URL('./swagger.json', import.meta.url)));
 import apiDocs from "./swagger.json" with {type:"json"};
+import { ApplicationError } from "./src/error-handler/applicationError.js";
+
 
 
 const server = express();
@@ -65,7 +67,13 @@ server.use((err, req, res, next) => {
             // console.log(logData);
             // await log(logData);
     logger.info(logData);
-    res.status(503).send("Something went wrong. Please try again later.");
+    if(err instanceof ApplicationError) {
+        res.status(err.code).send(err.message);
+        return;
+    }
+
+    // Server-error 
+    res.status(500).send("Something went wrong. Please try again later.");
 });
 
 // 4. Middleware for handling requests that will lead to 404 response to them
