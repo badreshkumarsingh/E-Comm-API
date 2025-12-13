@@ -34,3 +34,5 @@
 {"level":"info","message":"Fri Dec 12 2025 22:00:00 GMT+0530 (India Standard Time) /api/products/rate?userId=1&productId=10&rating=5 - {\"MSG\":\"A bODY\"} - ERROR Cannot read properties of undefined (reading 'rating')","service":"request-logging"}
 {"level":"info","message":"Fri Dec 12 2025 22:01:57 GMT+0530 (India Standard Time) /api/products/rate?userId=1&productId=10&rating=5 - {\"MSG\":\"A bODY\"}","service":"request-logging"}
 {"level":"info","message":"Fri Dec 12 2025 22:01:57 GMT+0530 (India Standard Time) /api/products/rate?userId=1&productId=10&rating=5 - {\"MSG\":\"A bODY\"} - ERROR Product not found","service":"request-logging"}
+{"level":"info","message":"Sat Dec 13 2025 22:15:31 GMT+0530 (India Standard Time) /api/products/ - undefined","service":"request-logging"}
+{"level":"info","message":"Sat Dec 13 2025 22:15:40 GMT+0530 (India Standard Time) /badresh - undefined","service":"request-logging"}

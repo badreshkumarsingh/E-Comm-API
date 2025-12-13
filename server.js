@@ -60,6 +60,13 @@ server.get('/', (req, res) => {
     res.send('Welcome to REST API creation');
 });
 
+
+
+// 4. Middleware for handling requests that will lead to 404 response to them
+server.use((req, res) => {
+    res.status(404).send("API Not Found. Please Check our Documentation for More Information at /api-docs");
+});
+
 // Error handler middleware
 server.use((err, req, res, next) => {
     console.log(err);
@@ -74,11 +81,6 @@ server.use((err, req, res, next) => {
 
     // Server-error 
     res.status(500).send("Something went wrong. Please try again later.");
-});
-
-// 4. Middleware for handling requests that will lead to 404 response to them
-server.use((req, res) => {
-    res.status(404).send("API Not Found. Please Check our Documentation for More Information at /api-docs");
 });
 
 server.listen(3100, () => {
