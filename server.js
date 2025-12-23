@@ -15,6 +15,7 @@ import { logger } from './src/middlewares/logger.middleware.js';
 // const apiDocs = JSON.parse(readFileSync(new URL('./swagger.json', import.meta.url)));
 import apiDocs from "./swagger.json" with {type:"json"};
 import { ApplicationError } from "./src/error-handler/applicationError.js";
+import connectToMongoDB from './src/config/mongodb.js';
 
 
 
@@ -85,4 +86,5 @@ server.use((err, req, res, next) => {
 
 server.listen(3100, () => {
     console.log('Server is listening at http://localhost:3100');
+    connectToMongoDB();
 });
