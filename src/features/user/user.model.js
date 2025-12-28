@@ -1,17 +1,34 @@
+import { getdb } from "../../config/mongodb.js";
+import { ApplicationError } from "../../error-handler/applicationError.js";
+
 export default class UserModel {
     constructor(name, email, password, type, id) {
-        this.id= id;
+        this._id= id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.type = type;
     }
 
-    static signUp(name, email, password, type) {
-        const newUser = new UserModel(name, email, password, type, users.length + 1);
-        // newUser.id = users.length + 1;
-        users.push(newUser);
-        return newUser;
+    static async signUp(name, email, password, type) {
+        try {
+            // 1. Get the databse
+            const db = getdb();
+
+            // 2. Gat the collection
+            const collection = db.collection("users");
+
+            const newUser = new UserModel(name, email, password, type); // , users.length + 1);
+            // newUser.id = users.length + 1;
+            // users.push(newUser);
+
+            // 3. Insert the document
+            await collection.insertOne(newUser);
+            return newUser;
+        } catch (err) {
+            throw new ApplicationError("Something went wrong", 500);
+        }
+        // return newUser;
     }
 
     static signIn(email, password) {

@@ -1,12 +1,18 @@
 import UserModel from "./user.model.js";
 import jwt from "jsonwebtoken";
+import { ApplicationError } from "../../error-handler/applicationError.js";
 
 
 export default class UserController {
-    signUp(req, res) {
-        const {name, email, password, type} = req.body;
-        const newUser = UserModel.signUp(name, email, password, type);
-        res.status(201).send(newUser);
+    async signUp(req, res) {
+        try {
+            const {name, email, password, type} = req.body;
+            const newUser = await UserModel.signUp(name, email, password, type);
+            res.status(201).send(newUser);
+        } catch (err) {
+            throw new ApplicationError("Could not create user", 500);
+        }
+        // res.status(201).send(newUser);
     }
 
     signIn(req, res) {

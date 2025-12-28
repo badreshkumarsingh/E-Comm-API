@@ -36,3 +36,10 @@
 {"level":"info","message":"Fri Dec 12 2025 22:01:57 GMT+0530 (India Standard Time) /api/products/rate?userId=1&productId=10&rating=5 - {\"MSG\":\"A bODY\"} - ERROR Product not found","service":"request-logging"}
 {"level":"info","message":"Sat Dec 13 2025 22:15:31 GMT+0530 (India Standard Time) /api/products/ - undefined","service":"request-logging"}
 {"level":"info","message":"Sat Dec 13 2025 22:15:40 GMT+0530 (India Standard Time) /badresh - undefined","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:01:01 GMT+0530 (India Standard Time) / - undefined","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:01:01 GMT+0530 (India Standard Time) /favicon.ico - undefined","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:01:07 GMT+0530 (India Standard Time) /api/products - undefined","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:06:27 GMT+0530 (India Standard Time) /api/users/signup - {\"email\":\"seller@ecom.com\",\"password\":\"Password1\",\"name\":\"Seller User\",\"type\":\"seller\"}","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:06:27 GMT+0530 (India Standard Time) /api/users/signup - {\"email\":\"seller@ecom.com\",\"password\":\"Password1\",\"name\":\"Seller User\",\"type\":\"seller\"} - ERROR newUser is not defined","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:07:16 GMT+0530 (India Standard Time) /api/users/signup - {\"email\":\"seller@ecom.com\",\"password\":\"Password1\",\"name\":\"Seller User\",\"type\":\"seller\"}","service":"request-logging"}
+{"level":"info","message":"Sun Dec 28 2025 15:11:41 GMT+0530 (India Standard Time) /api/users/signup - {\"email\":\"seller2@ecom.com\",\"password\":\"Password1\",\"name\":\"Seller User 2\",\"type\":\"seller\"}","service":"request-logging"}
