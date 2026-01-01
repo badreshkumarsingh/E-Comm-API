@@ -7,7 +7,7 @@ export default class UserController {
     async signUp(req, res) {
         try {
             const {name, email, password, type} = req.body;
-            const newUser = await UserModel.signUp(name, email, password, type);
+            const newUser = new UserModel(name, email, password, type);
             res.status(201).send(newUser);
         } catch (err) {
             throw new ApplicationError("Could not create user", 500);
