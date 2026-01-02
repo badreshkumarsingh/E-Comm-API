@@ -1,7 +1,7 @@
 import { getdb } from "../../config/mongodb.js";
 
 class UserRepository {
-    static async signUP(newUser) {
+    async signUp(newUser) {
         try {
             // get db
             const db = getdb();
