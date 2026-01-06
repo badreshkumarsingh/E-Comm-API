@@ -22,20 +22,28 @@ export default class UserController {
         // res.status(201).send(newUser);
     }
 
-    signIn(req, res) {
-        const result = UserModel.signIn(req.body.email, req.body.password);
+    // signIn(req, res) {
+    async signIn(req, res, next) {
 
-        if(!result) {
-            return res.status(400).send('Invalid Credentials');
-        } else {
-            // 1. Create token
-            const token = jwt.sign({userId: result.id, email: result.email}, 'QS0E7BxFK43MsuG5lhvsSk2XIWsi5JkH', {expiresIn: '1h'});
+        // const result = UserModel.signIn(req.body.email, req.body.password);
+        try {
+            const result = await this.userRepository.signIn(req.body.email, req.body.password);
 
-            // 2. Send token
-                // return res.send('SignIn Successful');
-            return res.status(200).send(token);
+            if(!result) {
+                return res.status(400).send('Invalid Credentials');
+            } else {
+                // 1. Create token
+                const token = jwt.sign({userId: result.id, email: result.email}, 'QS0E7BxFK43MsuG5lhvsSk2XIWsi5JkH', {expiresIn: '1h'});
 
+                // 2. Send token
+                    // return res.send('SignIn Successful');
+                return res.status(200).send(token);
+            }
+        } catch (err) {
+            console.log(err);
+            // throw new ApplicationError("Could not create user", 500);
+            // next(err);
+            return res.status(500).send("Something went wrong during SignIn");
         }
     }
-
 }

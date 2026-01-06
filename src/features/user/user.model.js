@@ -31,10 +31,10 @@ export default class UserModel {
     //     // return newUser;
     // }
 
-    static signIn(email, password) {
-        const user = users.find((u) => u.email == email && u.password == password);
-        return user;
-    }
+    // static signIn(email, password) {
+    //     const user = users.find((u) => u.email == email && u.password == password);
+    //     return user;
+    // }
 
     static getAll() {
         return users;
