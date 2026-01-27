@@ -2,6 +2,7 @@ import UserModel from "./user.model.js";
 import jwt from "jsonwebtoken";
 import { ApplicationError } from "../../error-handler/applicationError.js";
 import UserRepository from "./user.repository.js";
+import bcrypt from "bcrypt";
 
 
 export default class UserController {
@@ -12,9 +13,14 @@ export default class UserController {
     async signUp(req, res) {
         try {
             const {name, email, password, type} = req.body;
-            const newUser = new UserModel(name, email, password, type);
+
+            const hashedPassword = await bcrypt.hash(password, 12);
+
+            // const newUser = new UserModel(name, email, password, type);
+            const newUser = new UserModel(name, email, hashedPassword, type);
+
             await this.userRepository.signUp(newUser);
-            res.status(201).send(newUser);
+            res.status(201).send({name: newUser.name, email:newUser.email, type: newUser.type, _id: newUser._id});
         } catch (err) {
             console.log(err);
             throw new ApplicationError("Could not create user", 500);
@@ -27,18 +33,39 @@ export default class UserController {
 
         // const result = UserModel.signIn(req.body.email, req.body.password);
         try {
-            const result = await this.userRepository.signIn(req.body.email, req.body.password);
+            // 1 Find User by EMail
+            const user = await this.userRepository.findByEmail(req.body.email);
 
-            if(!result) {
+            if(!user) {
                 return res.status(400).send('Invalid Credentials');
             } else {
-                // 1. Create token
-                const token = jwt.sign({userId: result.id, email: result.email}, 'QS0E7BxFK43MsuG5lhvsSk2XIWsi5JkH', {expiresIn: '1h'});
+                // 2. Compare password with hashed password.
+                const result = await bcrypt.compare(req.body.password, user.password);
+                if(result) {
+                    
+                    // 3. Create token
+                    const token = jwt.sign({userId: result.id, email: result.email}, 'QS0E7BxFK43MsuG5lhvsSk2XIWsi5JkH', {expiresIn: '1h'});
 
-                // 2. Send token
-                    // return res.send('SignIn Successful');
-                return res.status(200).send(token);
+                    // 4. Send token
+                    return res.status(200).send(token);
+                } else {
+                    return res.status(400).send('Invalid Credentials');
+                }
             }
+
+            // const result = await this.userRepository.signIn(req.body.email, req.body.password);
+
+            // if(!result) {
+            //     return res.status(400).send('Invalid Credentials');
+            // }
+            // } else {
+            //     // 1. Create token
+            //     const token = jwt.sign({userId: result.id, email: result.email}, 'QS0E7BxFK43MsuG5lhvsSk2XIWsi5JkH', {expiresIn: '1h'});
+
+            //     // 2. Send token
+            //         // return res.send('SignIn Successful');
+            //     return res.status(200).send(token);
+            // }
         } catch (err) {
             console.log(err);
             // throw new ApplicationError("Could not create user", 500);
