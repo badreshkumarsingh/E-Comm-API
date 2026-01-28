@@ -1,37 +1,58 @@
+import { ApplicationError } from "../../error-handler/applicationError.js";
 import ProductModel from "./product.model.js";
+import ProductRepository from './product.repository.js';
 
 export default class ProductController {
 
-    getAllProducts(req, res) {
-        const products = ProductModel.getAll();
-        res.status(200).send(products);
+    constructor() {
+        this.productRepository = new ProductRepository();
     }
 
-    addProduct(req, res) {
-        // console.log(req.body);
-        // console.log("This is a post request");
-        // res.status(200).send("Product has been added");
-
-        const { name, price, sizes} = req.body;
-        const newProduct = {
-            name: name,
-            price: parseFloat(price),
-            sizes: sizes.split(','),
-            imageUrl: req.file.filename,
-        };
-
-        const createdRecord = ProductModel.add(newProduct);
-        res.status(201).send(createdRecord);
-    }
-
-    getOneProduct(req, res) {
-        const id = req.params.id;
-        const product = ProductModel.get(id);
-        if(!product) {
-            return res.status(404).send('Product not found');
-        } else {
-            res.status(200).send(product);
+    async getAllProducts(req, res) {
+        try {
+            const products = await this.productRepository.getAll();
+            res.status(200).send(products);
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Could not find all products", 500);
         }
+    }
+
+    async addProduct(req, res) {
+        try {
+            const { name, price, sizes} = req.body;
+            const newProduct = new ProductModel(name, null, parseFloat(price), req.file.filename, null, sizes.split(',') );
+            
+
+            const createdRecord = await this.productRepository.add(newProduct);
+            res.status(201).send(createdRecord);
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Could not add", 500);
+        }
+    }
+
+    async getOneProduct(req, res) {
+        try {
+            const id = req.params.id;
+            const product = await this.productRepository.get(id);
+            if(!product) {
+            return res.status(404).send('Product not found');
+            } else {
+                res.status(200).send(product);
+            }
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
+        }
+        
+        // const id = req.params.id;
+        // const product = ProductModel.get(id);
+        // if(!product) {
+        //     return res.status(404).send('Product not found');
+        // } else {
+        //     res.status(200).send(product);
+        // }
     }
 
     filterProducts(req, res) {

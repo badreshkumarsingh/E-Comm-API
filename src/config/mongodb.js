@@ -1,13 +1,17 @@
 
 import { MongoClient } from "mongodb";
 
-const url = "mongodb://localhost:27017/ecomdb";
+// import dotenv from 'dotenv';
+// dotenv.config();
+
+// const url = process.env.DB_URL;
+// console.log("URL :"+ url);
 
 let client;
 
 // const connectToMongoDB = () => {
 export const connectToMongoDB = () => {
-    MongoClient.connect(url)
+    MongoClient.connect(process.env.DB_URL)
     // .then(client => {
     .then(clientInstance => {
         client = clientInstance;

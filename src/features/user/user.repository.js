@@ -1,13 +1,18 @@
 import { getdb } from "../../config/mongodb.js";
 
 class UserRepository {
+
+    constructor () {
+        this.collection = 'users';
+    }
+
     async signUp(newUser) {
         try {
             // get db
             const db = getdb();
 
             // get collction
-            const collection = db.collection("users");
+            const collection = db.collection(this.collection);
 
             // insert document
             await collection.insertOne(newUser);
@@ -23,7 +28,7 @@ class UserRepository {
             const db = getdb();
 
             // get collction
-            const collection = db.collection("users");
+            const collection = db.collection(this.collection);
 
             // find the document
             return await collection.findOne({ email, password });
