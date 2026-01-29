@@ -10,8 +10,12 @@ const productController = new ProductController();
 
 // Define the routes and associate them with the controller methods
 // http://localhost:3100/api/products/filter?minPrice=10&maxPrice=50&category=Category1
-productRouter.post('/rate', productController.rateProduct);
-productRouter.get('/filter', productController.filterProducts);
+productRouter.post('/rate', (req, res, next) => {
+    productController.rateProduct(req, res, next);
+});
+productRouter.get('/filter', (req, res) => {
+    productController.filterProducts(req, res);
+});
 productRouter.get('/', (req, res) => {
     productController.getAllProducts(req, res);
 });

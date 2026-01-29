@@ -44,6 +44,41 @@ class ProductRepository {
         }
     }
 
+    async filter(minPrice, maxPrice, category) {
+        try {
+            const db = getdb();
+            const collection = db.collection(this.collection);
+            let filterExpression = {};
+            if(minPrice) {
+                filterExpression.price = { $gte: parseFloat(minPrice)};
+            }
+            if(maxPrice) {
+                filterExpression.price = { ...filterExpression.price, $lte: parseFloat(maxPrice)};
+            }
+            if(category) {
+                filterExpression.category = category;
+            }
+            return await collection.find(filterExpression).toArray();
+
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong in Product repository", 500);
+        }
+    }
+
+
+    async rate(userId, productId, rating) {
+        try {
+            const db = getdb();
+            const collection = db.collection(this.collection);
+            await collection.updateOne({_id: new ObjectId(productId)}, { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
+            console.log("userId in repo: ", userId);
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong in Product repository", 500);
+        }
+    }
+
 }
 
 export default ProductRepository;

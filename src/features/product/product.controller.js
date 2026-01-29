@@ -55,34 +55,37 @@ export default class ProductController {
         // }
     }
 
-    filterProducts(req, res) {
-        const minPrice = req.query.minPrice;
-        const maxPrice = req.query.maxPrice;
-        const category = req.query.category;
+    async filterProducts(req, res) {
+        try {
+            const minPrice = req.query.minPrice;
+            const maxPrice = req.query.maxPrice;
+            const category = req.query.category;
 
-        const result = ProductModel.filter(minPrice, maxPrice, category);
-        res.status(200).send(result);
+            const result = await this.productRepository.filter(minPrice, maxPrice, category);
+            res.status(200).send(result);
+        } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
+        }
     }
 
-    rateProduct(req, res, next) {
+    async rateProduct(req, res, next) {
         // const {userId, productId, rating} = req.query
         console.log(req.query);
 
         try {
 
-        const userId = req.query.userId;
+        const userId = req.userId;
+        console.log("req.userId: ", req.userId);
+        console.log("userId: ", userId);
         const productId = req.query.productId;
         // const rating = req.querys.rating;
         const rating = req.query.rating;
 
         // const error = ProductModel.rateProduct(userId, productId, rating);
         // try {
-            ProductModel.rateProduct(userId, productId, rating);
-        // } catch (err) {
-        //     return res.status(400).send(err.message);
-        // }
-        // console.log(error);
-
+        await this.productRepository.rate(userId, productId, rating);
+        return res.status(200).send("Rating Added");
         } catch (err) {
             console.log("Error in controller");
             next(err);
@@ -94,7 +97,7 @@ export default class ProductController {
         // } else {
         //     return res.status(200).send("Rating Added");
         // }
-        return res.status(200).send("Rating Added");
+        // return res.status(200).send("Rating Added");
     }
     
 }
