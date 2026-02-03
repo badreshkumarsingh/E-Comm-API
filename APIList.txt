@@ -11,3 +11,5 @@ ProductController
 UserController
     1. Signup - Email, Name, Password, TypeOfUser(customer, seller) - Done
     2. Signin - Email, Password - Done
+
+Location: BEwNJSA_Week2_Lecture1

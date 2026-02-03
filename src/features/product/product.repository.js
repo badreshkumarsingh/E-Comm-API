@@ -67,12 +67,49 @@ class ProductRepository {
     }
 
 
+    // async rate(userId, productId, rating) {
+    //     try {
+    //         const db = getdb();
+    //         const collection = db.collection(this.collection);
+    //         // 1. Find the Product
+    //         const product = await collection.findOne({_id: new ObjectId(productId)});
+    //         // 2. Find the rating object for given userId
+    //         const userRating = product?.ratings?.find((r) => r.userId == userId);
+    //         if(userRating) {
+    //             // 3. Update the rating
+    //             await collection.updateOne({
+    //                 _id: new ObjectId(productId), "ratings.userId": new ObjectId(userId)
+    //             }, {
+    //                 $set: {"ratings.$.rating": rating}
+    //             });
+    //         } else {
+    //             await collection.updateOne({_id: new ObjectId(productId)},
+    //             { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
+    //         }
+    //         // console.log("userId in repo: ", userId);
+    //     } catch (err) {
+    //         console.log(err);
+    //         throw new ApplicationError("Something went wrong in Product repository", 500);
+    //     }
+    // }
+
     async rate(userId, productId, rating) {
         try {
             const db = getdb();
             const collection = db.collection(this.collection);
-            await collection.updateOne({_id: new ObjectId(productId)}, { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
-            console.log("userId in repo: ", userId);
+            
+            // 1. Remove existing entry
+            await collection.updateOne({
+                _id: new ObjectId(productId)
+            }, {
+                $pull: {ratings: {userId: new ObjectId(userId)}}
+            });
+            
+            // 2. Add new entry
+            await collection.updateOne({_id: new ObjectId(productId)},
+                { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
+
+            // console.log("userId in repo: ", userId);
         } catch (err) {
             console.log(err);
             throw new ApplicationError("Something went wrong in Product repository", 500);
