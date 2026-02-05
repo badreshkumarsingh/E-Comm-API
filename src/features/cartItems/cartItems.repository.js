@@ -12,10 +12,16 @@ export default class CartItemsRepository {
         try {
             const db = getdb();
             const collection = db.collection(this.collection);
-            await collection.insertOne({productId: new ObjectId(productId), userId: new ObjectId(userId), quantity});
+            const id = await this.getNextCounter(db);
+            await collection.updateOne(
+                {productId: new ObjectId(productId), userId: new ObjectId(userId)},
+                {$setOnInsert: {_id: id},
+                    $inc: {quantity: quantity}},
+                {upsert: true}
+            );
         } catch (err) {
             console.log(err);
-            throw new ApplicationError("Something went wrong in Product repository", 500);
+            throw new ApplicationError("Something went wrong in Cart repository", 500);
         }
     }
 
@@ -43,5 +49,16 @@ export default class CartItemsRepository {
             console.log(err);
             throw new ApplicationError("Something went wrong in Product repository", 500);
         }
+    }
+
+    async getNextCounter(db) {
+        const resultDocument = await db.collection("counters").findOneAndUpdate(
+            {_id: "cartItemId"},
+            {$inc: {value: 1}},
+            {returnDocument: "after"}
+        );
+        console.log(resultDocument);
+        console.log("resultDocument.value: "+resultDocument.value)
+        return resultDocument.value;
     }
 }

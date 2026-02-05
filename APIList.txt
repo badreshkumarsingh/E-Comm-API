@@ -13,3 +13,7 @@ UserController
     2. Signin - Email, Password - Done
 
 Location: BEwNJSA_Week2_Lecture1
+
+Steps for modifying _id:
+    1. Create Counter Collection (_id: "cartItemId", value: 0)
+    2. While adding cart item, increment the counter, and hen use counter value as the id to cart item document
