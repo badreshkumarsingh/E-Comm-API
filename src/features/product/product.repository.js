@@ -44,7 +44,7 @@ class ProductRepository {
         }
     }
 
-    async filter(minPrice, maxPrice, category) {
+    async filter(minPrice, category) {
         try {
             const db = getdb();
             const collection = db.collection(this.collection);
@@ -52,13 +52,15 @@ class ProductRepository {
             if(minPrice) {
                 filterExpression.price = { $gte: parseFloat(minPrice)};
             }
-            if(maxPrice) {
-                filterExpression.price = { ...filterExpression.price, $lte: parseFloat(maxPrice)};
-            }
+            // if(maxPrice) {
+            //     filterExpression.price = { ...filterExpression.price, $lte: parseFloat(maxPrice)};
+            // }
             if(category) {
-                filterExpression.category = category;
+                // filterExpression = { $and: [{category: category}, filterExpression]};
+                filterExpression = { $or: [{category: category}, filterExpression]};
+                // filterExpression.category = category;
             }
-            return await collection.find(filterExpression).toArray();
+            return await collection.find(filterExpression).project({name:1, price:1, _id: 0, ratings: {$slice: -1}}).toArray();
 
         } catch (err) {
             console.log(err);
@@ -111,6 +113,25 @@ class ProductRepository {
 
             // console.log("userId in repo: ", userId);
         } catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong in Product repository", 500);
+        }
+    }
+
+
+    async averageProductPricePerCategory() {
+        try{
+            const db = getdb();
+            return await db.collection(this.collection).aggregate([
+                {
+                    $group: {
+                        _id: "$category",
+                        averagePrice: {$avg: "$price"}
+                    }
+                }
+            ]).toArray();
+
+        }catch (err) {
             console.log(err);
             throw new ApplicationError("Something went wrong in Product repository", 500);
         }

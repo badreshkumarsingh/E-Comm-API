@@ -61,7 +61,7 @@ export default class ProductController {
             const maxPrice = req.query.maxPrice;
             const category = req.query.category;
 
-            const result = await this.productRepository.filter(minPrice, maxPrice, category);
+            const result = await this.productRepository.filter(minPrice, category);
             res.status(200).send(result);
         } catch (err) {
             console.log(err);
@@ -102,4 +102,14 @@ export default class ProductController {
         // return res.status(200).send("Rating Added");
     }
     
+
+    async averagePrice(req, res, next) {
+        try {
+            const result = await this.productRepository.averageProductPricePerCategory();
+            res.status(200).send(result);
+        }catch (err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
+        }
+    }
 }
