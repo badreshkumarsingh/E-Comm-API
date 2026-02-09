@@ -17,3 +17,68 @@ Location: BEwNJSA_Week2_Lecture1
 Steps for modifying _id:
     1. Create Counter Collection (_id: "cartItemId", value: 0)
     2. While adding cart item, increment the counter, and hen use counter value as the id to cart item document
+
+
+db.products.aggregate([
+    //stage1 create documents for ratings
+    {
+        $unwind: "$ratings"
+    },
+    //stage2 group rating per product & get average
+    {
+        $group: {
+            _id: "$name",
+            averageRating: {$avg: "$ratings.rating"}
+        }
+    }
+])
+
+
+
+3rd Insight:
+
+db.products.aggregate([
+    {
+        $project: {name:1, countOfRating: {
+            $cond: {if: {$isArray: "$ratings"},
+            then: {$size: "$ratings"}, else: 0}}
+        }
+    }
+])
+
+
+
+
+4th insight: product with max no. of ratings:
+
+db.products.aggregate([
+    {
+        $project: {name:1, countOfRating: {
+            $cond: {if: {$isArray: "$ratings"},
+            then: {$size: "$ratings"}, else: 0}}
+        }
+    },
+    {
+        $sort: {countOfRating: -1}
+    }
+])
+
+
+
+
+5h insight: limit to just 1 item in result
+
+db.products.aggregate([
+    {
+        $project: {name:1, countOfRating: {
+            $cond: {if: {$isArray: "$ratings"},
+            then: {$size: "$ratings"}, else: 0}}
+        }
+    },
+    {
+        $sort: {countOfRating: -1}
+    },
+    {
+        $limit: 1
+    }
+])

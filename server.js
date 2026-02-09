@@ -20,6 +20,7 @@ import { logger } from './src/middlewares/logger.middleware.js';
 import apiDocs from "./swagger.json" with {type:"json"};
 import { ApplicationError } from "./src/error-handler/applicationError.js";
 import { connectToMongoDB } from './src/config/mongodb.js';
+import orderRouter from './src/features/order/order.routes.js';
 
 
 
@@ -53,6 +54,8 @@ server.use(bodyParser.json());
 server.use("/api-docs", swagger.serve, swagger.setup(apiDocs));
 
 server.use(loggerMiddleware);
+
+server.use('/api/orders', jwtAuth, orderRouter);
 
 server.use('/api/products', jwtAuth, productRouter);
 

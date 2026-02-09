@@ -28,6 +28,10 @@ export const getdb = () => {
     return client.db();
 }
 
+export const getClient = () => {
+    return client;
+}
+
 const createCounter = async (db) => {
     const existingCounter = await db.collection("counters").findOne({_id: "cartItemId"});
     if(!existingCounter) {
