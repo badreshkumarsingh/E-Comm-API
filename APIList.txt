@@ -12,7 +12,7 @@ UserController
     1. Signup - Email, Name, Password, TypeOfUser(customer, seller) - Done
     2. Signin - Email, Password - Done
 
-Location: BEwNJSA_Week2_Lecture1
+Location: BEwNJSA_Week2_Lecture2
 
 Steps for modifying _id:
     1. Create Counter Collection (_id: "cartItemId", value: 0)

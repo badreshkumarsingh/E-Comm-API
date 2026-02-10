@@ -21,6 +21,7 @@ import apiDocs from "./swagger.json" with {type:"json"};
 import { ApplicationError } from "./src/error-handler/applicationError.js";
 import { connectToMongoDB } from './src/config/mongodb.js';
 import orderRouter from './src/features/order/order.routes.js';
+import { connectUsingMongoose } from './src/config/mongooseConfig.js';
 
 
 
@@ -93,5 +94,6 @@ server.use((err, req, res, next) => {
 
 server.listen(3100, () => {
     console.log('Server is listening at http://localhost:3100');
-    connectToMongoDB();
+    // connectToMongoDB();
+    connectUsingMongoose();
 });
