@@ -176,3 +176,6 @@
 {"level":"info","message":"Mon Feb 09 2026 15:37:16 GMT+0530 (India Standard Time) /api/orders - undefined","service":"request-logging"}
 {"level":"info","message":"Mon Feb 09 2026 16:54:49 GMT+0530 (India Standard Time) /api/orders - undefined","service":"request-logging"}
 {"level":"info","message":"Mon Feb 09 2026 16:55:13 GMT+0530 (India Standard Time) /api/orders - undefined","service":"request-logging"}
+{"level":"info","message":"Thu Feb 12 2026 12:39:07 GMT+0530 (India Standard Time) /api/users/signup - {\"email\":\"seller6@ecom.com\",\"password\":\"Password1\",\"name\":\"Seller User 6\"}","service":"request-logging"}
+{"level":"info","message":"Thu Feb 12 2026 18:15:26 GMT+0530 (India Standard Time) /api/users/resetPassword - undefined","service":"request-logging"}
+{"level":"info","message":"Thu Feb 12 2026 18:17:43 GMT+0530 (India Standard Time) /api/users/resetPassword - {\"newPassword\":\"Password2\"}","service":"request-logging"}

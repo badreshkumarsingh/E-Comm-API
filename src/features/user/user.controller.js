@@ -75,4 +75,18 @@ export default class UserController {
             return res.status(500).send("Something went wrong during SignIn");
         }
     }
+
+    async resetPassword(req, res, next) {
+        const {newPassword} = req.body;
+        const userId = req.userId;
+        const hashedPassword = await bcrypt.hash(newPassword, 12);
+        try {
+            await this.userRepository.resetPassword(userId, hashedPassword);
+            res.status(200).send("Password is reset");
+        } catch(err) {
+            console.log(err);
+            return res.status(500).send("Something went wrong during SignIn");
+        }
+    }
+
 }

@@ -1,56 +1,55 @@
-import { getdb } from "../../config/mongodb.js";
+import mongoose from 'mongoose';
+import { userSchema } from './user.schema.js';
+import { ApplicationError } from '../../error-handler/applicationError.js';
 
-class UserRepository {
+// Creating Model from Schema
+const UserModel = mongoose.model('User', userSchema);
 
-    constructor () {
-        this.collection = 'users';
-    }
+export default class UserRepository {
 
-    async signUp(newUser) {
+    async signUp (user) {
         try {
-            // get db
-            const db = getdb();
-
-            // get collction
-            const collection = db.collection(this.collection);
-
-            // insert document
-            await collection.insertOne(newUser);
+            // Create instance of Model
+            const newUser = new UserModel(user);
+            await newUser.save();
             return newUser;
-        } catch (err) {
-            throw new ApplicationError("Something went wrong in signUp repository", 500);
+        } catch(err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
         }
+        
     }
 
     async signIn(email, password) {
         try {
-            // get db
-            const db = getdb();
-
-            // get collction
-            const collection = db.collection(this.collection);
-
-            // find the document
-            return await collection.findOne({ email, password });
+            return await UserModel.findOne({email, password});
         } catch (err) {
-            throw new ApplicationError("Something went wrong in signIn repository", 500);
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
         }
     }
 
     async findByEmail(email) {
         try {
-            // get db
-            const db = getdb();
-
-            // get collction
-            const collection = db.collection("users");
-
-            // find the document
-            return await collection.findOne({ email});
+            return await UserModel.findOne({ email });
         } catch (err) {
             throw new ApplicationError("Something went wrong in signIn repository", 500);
         }
     }
-}
 
-export default UserRepository;
+    async resetPassword (userId, newPassword) {
+        try{
+            let user = await UserModel.findById(userId);
+            if(user) {
+                user.password = newPassword;
+                user.save();
+            } else {
+                throw new Error("User not found");
+            }
+        } catch(err) {
+            console.log(err);
+            throw new ApplicationError("Something went wrong", 500);
+        }
+    }
+
+}
