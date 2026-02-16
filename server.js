@@ -22,6 +22,7 @@ import { ApplicationError } from "./src/error-handler/applicationError.js";
 import { connectToMongoDB } from './src/config/mongodb.js';
 import orderRouter from './src/features/order/order.routes.js';
 import { connectUsingMongoose } from './src/config/mongooseConfig.js';
+import mongoose from 'mongoose';
 
 
 
@@ -83,6 +84,11 @@ server.use((err, req, res, next) => {
             // console.log(logData);
             // await log(logData);
     logger.info(logData);
+
+    if(err instanceof mongoose.Error.ValidationError) {
+        return res.status(400).send(err.message);
+    }
+
     if(err instanceof ApplicationError) {
         res.status(err.code).send(err.message);
         return;

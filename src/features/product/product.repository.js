@@ -1,6 +1,15 @@
 import { ObjectId } from 'mongodb';
 import { getdb } from '../../config/mongodb.js';
 import { ApplicationError } from '../../error-handler/applicationError.js';
+import { productSchema } from './product.schema.js';
+import { reviewSchema } from './review.schema.js';
+import mongoose from 'mongoose';
+
+const ProductModel = mongoose.model('Product', productSchema);
+const ReviewModel = mongoose.model('Review', reviewSchema);
+
+
+
 class ProductRepository {
 
     constructor () {
@@ -95,23 +104,53 @@ class ProductRepository {
     //     }
     // }
 
+    // async rate(userId, productId, rating) {
+    //     try {
+    //         const db = getdb();
+    //         const collection = db.collection(this.collection);
+            
+    //         // 1. Remove existing entry
+    //         await collection.updateOne({
+    //             _id: new ObjectId(productId)
+    //         }, {
+    //             $pull: {ratings: {userId: new ObjectId(userId)}}
+    //         });
+            
+    //         // 2. Add new entry
+    //         await collection.updateOne({_id: new ObjectId(productId)},
+    //             { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
+
+    //         // console.log("userId in repo: ", userId);
+    //     } catch (err) {
+    //         console.log(err);
+    //         throw new ApplicationError("Something went wrong in Product repository", 500);
+    //     }
+    // }
+
     async rate(userId, productId, rating) {
         try {
-            const db = getdb();
-            const collection = db.collection(this.collection);
-            
-            // 1. Remove existing entry
-            await collection.updateOne({
-                _id: new ObjectId(productId)
-            }, {
-                $pull: {ratings: {userId: new ObjectId(userId)}}
-            });
-            
-            // 2. Add new entry
-            await collection.updateOne({_id: new ObjectId(productId)},
-                { $push: { ratings: { userId: new ObjectId(userId), rating: rating } } });
+            // 1. Check if product exists
+            const productToUpdate = await ProductModel.findById(productId);
+            if(!productToUpdate) {
+                throw new Error("Product not found.");
+            }
 
-            // console.log("userId in repo: ", userId);
+            // 2. Get the existing review
+            const userReview = await ReviewModel.findOne({product: new ObjectId(productId),
+                user: new ObjectId(userId)
+            });
+            if(userReview) {
+                userReview.rating = rating;
+                await userReview.save();
+            } else {
+                const newReview = new ReviewModel({
+                    product: new ObjectId(productId),
+                    user: new ObjectId(userId),
+                    rating: rating
+                });
+                newReview.save();
+            }
+
         } catch (err) {
             console.log(err);
             throw new ApplicationError("Something went wrong in Product repository", 500);

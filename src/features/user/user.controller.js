@@ -10,7 +10,7 @@ export default class UserController {
         this.userRepository = new UserRepository();
     }
 
-    async signUp(req, res) {
+    async signUp(req, res, next) {
         try {
             const {name, email, password, type} = req.body;
 
@@ -22,8 +22,8 @@ export default class UserController {
             await this.userRepository.signUp(newUser);
             res.status(201).send({name: newUser.name, email:newUser.email, type: newUser.type, _id: newUser._id});
         } catch (err) {
-            console.log(err);
-            throw new ApplicationError("Could not create user", 500);
+            next(err);
+            // return res.status(200).send("Something went wrong");
         }
         // res.status(201).send(newUser);
     }
