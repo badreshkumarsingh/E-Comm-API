@@ -4,9 +4,11 @@ import { ApplicationError } from '../../error-handler/applicationError.js';
 import { productSchema } from './product.schema.js';
 import { reviewSchema } from './review.schema.js';
 import mongoose from 'mongoose';
+import { categorySchema } from './category.schema.js';
 
 const ProductModel = mongoose.model('Product', productSchema);
 const ReviewModel = mongoose.model('Review', reviewSchema);
+const CategoryModel = mongoose.model('Category', categorySchema);
 
 
 
@@ -16,13 +18,29 @@ class ProductRepository {
         this.collection = 'products';
     }
 
-    async add(newProduct) {
+    async add(productData) {
         try {
-            const db = getdb();
-            const collection = db.collection(this.collection);
+            // const db = getdb();
+            // const collection = db.collection(this.collection);
 
-            await collection.insertOne(newProduct);
-            return newProduct;
+            // await collection.insertOne(newProduct);
+            // return newProduct;
+
+            // 1. Add product
+            
+            productData.categories = productData.category.split(',').map(e=> e.trim());
+            console.log(productData);
+            const newProduct = ProductModel(productData);
+            const savedProduct = await newProduct.save();
+
+            // 2. Update Categories
+            await CategoryModel.updateMany(
+                {_id: {$in: productData.categories}},
+                {
+                    $push: {products: new ObjectId(savedProduct._id)}
+                }
+            );
+
         } catch (err) {
             console.log(err);
             throw new ApplicationError("Something went wrong in Product repository", 500);
