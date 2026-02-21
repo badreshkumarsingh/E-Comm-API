@@ -23,6 +23,7 @@ import { connectToMongoDB } from './src/config/mongodb.js';
 import orderRouter from './src/features/order/order.routes.js';
 import { connectUsingMongoose } from './src/config/mongooseConfig.js';
 import mongoose from 'mongoose';
+import likeRouter from './src/features/like/like.router.js';
 
 
 
@@ -62,6 +63,8 @@ server.use('/api/orders', jwtAuth, orderRouter);
 server.use('/api/products', jwtAuth, productRouter);
 
 server.use('/api/users', userRouter);
+
+server.use('/api/likes', jwtAuth, likeRouter);
 
 server.use('/api/cartItems', jwtAuth, cartRouter);
 
